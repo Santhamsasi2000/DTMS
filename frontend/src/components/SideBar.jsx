@@ -16,31 +16,31 @@ const SideBar = () => {
   };
 
   return (
-    <aside className="h-screen w-[250px] bg-[#003B7A] text-white flex flex-col justify-between border-r border-white/10">
+     <aside className="h-screen w-[250px] bg-blue-500 text-white flex flex-col justify-between border-r border-white/10">
       
       {/* Top Section */}
       <div>
         {/* Logo */}
-        <div className="px-6 py-5 border-b border-white/20">
+        <div className="px-6 py-5 border-b-2 border-white border-dotted">
           <div className="flex items-center gap-3">
             <img
-              src="/icon/images.png"
+              src="/logo.png"
               alt="EPFO Logo"
               className="w-12 h-12 rounded-full"
             />
 
             <div>
-              <h2 className="font-bold text-xl font-sora">
+               <h2 className="font-bold text-xl leading-none mb-1 font-sora">
                 EPFO
               </h2>
 
               <p className="text-sky-300 text-sm font-medium">
-                Regional Office, Chennai
+                DTMS
               </p>
 
-              <p className="text-xs text-white/70">
-                Tapal Management System
-              </p>
+              {/* <p className="text-xs text-white/70">
+                Digital Tapal Management System
+              </p> */}
             </div>
           </div>
         </div>
@@ -52,10 +52,11 @@ const SideBar = () => {
               <NavLink
                 to={path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-xl text-[15px] font-medium transition-all duration-300 ${
+                  `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-300
+                  ${
                     isActive
-                      ? "bg-[#1D4E89] text-white shadow-lg"
-                      : "text-white hover:bg-white/10"
+                      ? "bg-sky-300 text-blue-800 shadow-lg"
+                      : "text-white hover:bg-white/20 hover:text-white"
                   }`
                 }
               >
@@ -68,7 +69,7 @@ const SideBar = () => {
       </div>
 
       {/* Logout */}
-      <div className="px-4 py-6 border-t border-white/20">
+         <div className="flex flex-col gap-2 px-4 py-6 border-t-2 border-white border-dotted">
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium

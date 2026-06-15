@@ -10,6 +10,7 @@ function App() {
   return (
     <>
      <Routes>
+        <Route path="/" element={<Navigate to="/tapal/receipt-entry" />}/>
         {/* Redirect Route */}
         <Route path="/" element={<Navigate to="/tapal" />} />
           <Route path="/tapal" element={<TapalLayout />}>

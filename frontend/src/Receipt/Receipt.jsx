@@ -6,6 +6,7 @@ import FormFileUpload from "./components/FormFileUpload";
 import ReceiptFormActions from "./components/ReceiptFormActions";
 import { RECEIPT_MODE_OPTIONS, FORM_TYPE_OPTIONS } from "./receiptConstants";
 
+
 const initialForm = {
   receiptDate: new Date().toISOString().split("T")[0],
   receiptMode: "",
@@ -53,28 +54,60 @@ const Receipt = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setIsSubmitting(true);
     setSuccessMsg("");
-    try {
-      const payload = {
-        ...form,
-        formType: form.formType === "other" ? form.formTypeOther : form.formType,
-      };
-      // TODO: connect to backend API
-      console.log("Submitting:", payload, files);
-      await new Promise((r) => setTimeout(r, 1200));
-      const taphalNo = `TPCH-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`;
-      setSuccessMsg(`Receipt saved! Tapal No: ${taphalNo}`);
-      handleCancel();
-    } catch {
-      alert("Failed to save. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+
+     try {
+    const token = localStorage.getItem("token");
+
+    const payload = {
+      ...form,
+      formType:
+        form.formType === "other"
+          ? form.formTypeOther
+          : form.formType,
+    };
+
+    const formData = new FormData();
+
+    Object.keys(payload).forEach((key) => {
+      formData.append(key, payload[key]);
+    });
+
+    files.forEach((file) => {
+      formData.append("documents", file);
+    });
+
+    const { data } = await axios.post(
+      `${API_BASE_URL}/api/receipts`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    setSuccessMsg(
+      `Receipt saved successfully! Tapal No : ${data.data.taphalNo}`
+    );
+
+    setForm(initialForm);
+    setFiles([]);
+  } catch (error) {
+    alert(
+      error.response?.data?.message ||
+      "Failed to save receipt"
+    );
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/60 via-white to-sky-50/40 p-6 md:p-8">
+     <section className="p-6 bg-blue-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
 
         {/* Page Header */}
@@ -257,7 +290,7 @@ const Receipt = () => {
           EPFO Regional Office, Chennai · Tapal Management System · Ministry of Labour & Employment
         </p>
       </div>
-    </div>
+    </section>
   );
 };
 
