@@ -58,52 +58,58 @@ const Receipt = () => {
     setIsSubmitting(true);
     setSuccessMsg("");
 
-     try {
-    const token = localStorage.getItem("token");
+     try 
+     {
+      const token = localStorage.getItem("token");
+      
 
-    const payload = {
-      ...form,
-      formType:
-        form.formType === "other"
-          ? form.formTypeOther
-          : form.formType,
-    };
+      const payload = {
+        ...form,
+        formType:
+          form.formType === "other"
+            ? form.formTypeOther
+            : form.formType,
+      };
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    Object.keys(payload).forEach((key) => {
-      formData.append(key, payload[key]);
-    });
+      Object.keys(payload).forEach((key) => {
+        formData.append(key, payload[key]);
+      });
 
-    files.forEach((file) => {
-      formData.append("documents", file);
-    });
+      files.forEach((file) => {
+        formData.append("documents", file);
+      });
 
-    const { data } = await axios.post(
-      `${API_BASE_URL}/api/receipts`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+      const { data } = await axios.post(
+        `${API_BASE_URL}/api/receipts`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      
+      setSuccessMsg(
+        `Receipt saved successfully! Tapal No : ${data.data.taphalNo}`
+      );
 
-    setSuccessMsg(
-      `Receipt saved successfully! Tapal No : ${data.data.taphalNo}`
-    );
-
-    setForm(initialForm);
-    setFiles([]);
-  } catch (error) {
-    alert(
-      error.response?.data?.message ||
-      "Failed to save receipt"
-    );
-  } finally {
-    setIsSubmitting(false);
-  }
+      setForm(initialForm);
+      setFiles([]);
+    } 
+    catch (error) 
+    {
+      alert(
+        error.response?.data?.message ||
+        "Failed to save receipt"
+      );
+    } 
+    finally 
+    {
+      setIsSubmitting(false);
+    }
 };
 
   return (
