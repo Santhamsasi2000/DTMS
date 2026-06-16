@@ -67,7 +67,9 @@ const Receipt = () => {
       const formData = new FormData();
       formData.append("receiptDate",       form.receiptDate);
       formData.append("receiptMode",       form.receiptMode);
-      formData.append("formType",          form.formType === "other" ? form.formTypeOther : form.formType);
+      
+      const resolvedFormType = form.formType === "other" ? form.formTypeOther : form.formType;
+      if (resolvedFormType) formData.append("formType", resolvedFormType);
       formData.append("uan",               form.uan);
       formData.append("memberId",          form.memberId);
       formData.append("memberName",        form.memberName);

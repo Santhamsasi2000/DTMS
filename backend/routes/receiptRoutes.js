@@ -39,6 +39,8 @@ router.post("/", upload.array("documents", 10), async (req, res) => {
       establishmentName, group, task, subject,
     } = req.body;
 
+    const clean = (val) => (val && val.trim() !== "" ? val.trim() : undefined);
+
     const documents = (req.files || []).map((f) => ({
       originalName: f.originalname,
       fileName:     f.filename,

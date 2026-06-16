@@ -17,7 +17,8 @@ const receiptSchema = new mongoose.Schema(
     },
     formType: {
       type: String,
-      required: true,
+      required: false,
+      trim: true,
     },
     uan: { type: String, trim: true },
     memberId: { type: String, trim: true },
@@ -44,19 +45,17 @@ const receiptSchema = new mongoose.Schema(
     actionLog: [
       {
         action: String,
-        updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
         updatedByName: String,
         timestamp: { type: Date, default: Date.now },
       },
     ],
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
     createdByName: String,
   },
   { timestamps: true }
 );
 
 // Auto-generate Taphal Number before save
-receiptSchema.pre("save", async function (next) {
+receiptSchema.pre("save", async function () {
   if (!this.taphalNo) {
     const now = new Date();
     const year = now.getFullYear();
@@ -66,7 +65,6 @@ receiptSchema.pre("save", async function (next) {
     const seq = String(count + 1).padStart(4, "0");
     this.taphalNo = `TPCH-${year}${month}${day}-${seq}`;
   }
-  next();
 });
 
 module.exports = mongoose.model("Receipt", receiptSchema);
