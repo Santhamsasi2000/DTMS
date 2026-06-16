@@ -44,15 +44,12 @@ const receiptSchema = new mongoose.Schema(
     actionLog: [
       {
         action: String,
-        updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
         updatedByName: String,
         timestamp: { type: Date, default: Date.now },
       },
     ],
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
     createdByName: String,
   },
   { timestamps: true }

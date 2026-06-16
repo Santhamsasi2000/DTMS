@@ -4,7 +4,6 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const Receipt = require("../models/ReceiptModel");
-const { protect } = require("../middleware/auth");
 
 // ─── Multer Storage Setup ─────────────────────────────────────────────────────
 const uploadDir = path.join(__dirname, "../uploads");
@@ -28,11 +27,11 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024, files: 10 }, // 10MB per file, max 10 files
+  limits: { fileSize: 10 * 1024 * 1024, files: 10 },
 });
 
 // ─── POST /api/receipts — Create Receipt ──────────────────────────────────────
-router.post("/", protect, upload.array("documents", 10), async (req, res) => {
+router.post("/", upload.array("documents", 10), async (req, res) => {
   try {
     const {
       receiptDate, receiptMode, formType,
@@ -42,10 +41,10 @@ router.post("/", protect, upload.array("documents", 10), async (req, res) => {
 
     const documents = (req.files || []).map((f) => ({
       originalName: f.originalname,
-      fileName: f.filename,
-      filePath: f.path,
-      mimeType: f.mimetype,
-      size: f.size,
+      fileName:     f.filename,
+      filePath:     f.path,
+      mimeType:     f.mimetype,
+      size:         f.size,
     }));
 
     const receipt = await Receipt.create({
@@ -61,15 +60,8 @@ router.post("/", protect, upload.array("documents", 10), async (req, res) => {
       task,
       subject,
       documents,
-      createdBy: req.user.id,
-      createdByName: req.user.name,
-      actionLog: [
-        {
-          action: "Receipt created",
-          updatedBy: req.user.id,
-          updatedByName: req.user.name,
-        },
-      ],
+      createdByName: "DEO",
+      actionLog: [{ action: "Receipt created", updatedByName: "DEO" }],
     });
 
     res.status(201).json({ success: true, data: receipt });
@@ -79,7 +71,7 @@ router.post("/", protect, upload.array("documents", 10), async (req, res) => {
 });
 
 // ─── GET /api/receipts — List All (with search + pagination) ──────────────────
-router.get("/", protect, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const {
       search = "",
@@ -88,35 +80,34 @@ router.get("/", protect, async (req, res) => {
       formType,
       startDate,
       endDate,
-      page = 1,
+      page  = 1,
       limit = 10,
     } = req.query;
 
     const query = {};
 
-    // Full-text search across key fields
     if (search) {
       query.$or = [
-        { taphalNo: { $regex: search, $options: "i" } },
-        { uan: { $regex: search, $options: "i" } },
-        { memberId: { $regex: search, $options: "i" } },
-        { memberName: { $regex: search, $options: "i" } },
-        { establishmentName: { $regex: search, $options: "i" } },
-        { group: { $regex: search, $options: "i" } },
+        { taphalNo:         { $regex: search, $options: "i" } },
+        { uan:              { $regex: search, $options: "i" } },
+        { memberId:         { $regex: search, $options: "i" } },
+        { memberName:       { $regex: search, $options: "i" } },
+        { establishmentName:{ $regex: search, $options: "i" } },
+        { group:            { $regex: search, $options: "i" } },
       ];
     }
 
-    if (status) query.status = status;
-    if (group) query.group = { $regex: group, $options: "i" };
-    if (formType) query.formType = formType;
+    if (status)               query.status   = status;
+    if (group)                query.group    = { $regex: group, $options: "i" };
+    if (formType)             query.formType = formType;
     if (startDate || endDate) {
       query.receiptDate = {};
       if (startDate) query.receiptDate.$gte = new Date(startDate);
-      if (endDate) query.receiptDate.$lte = new Date(endDate);
+      if (endDate)   query.receiptDate.$lte = new Date(endDate);
     }
 
-    const skip = (Number(page) - 1) * Number(limit);
-    const total = await Receipt.countDocuments(query);
+    const skip    = (Number(page) - 1) * Number(limit);
+    const total   = await Receipt.countDocuments(query);
     const receipts = await Receipt.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -127,8 +118,8 @@ router.get("/", protect, async (req, res) => {
       data: receipts,
       pagination: {
         total,
-        page: Number(page),
-        limit: Number(limit),
+        page:       Number(page),
+        limit:      Number(limit),
         totalPages: Math.ceil(total / Number(limit)),
       },
     });
@@ -138,16 +129,15 @@ router.get("/", protect, async (req, res) => {
 });
 
 // ─── GET /api/receipts/file/:filename — Download File ─────────────────────────
-router.get("/file/:filename", protect, (req, res) => {
+router.get("/file/:filename", (req, res) => {
   const filePath = path.join(uploadDir, req.params.filename);
-  if (!fs.existsSync(filePath)) {
+  if (!fs.existsSync(filePath))
     return res.status(404).json({ success: false, message: "File not found" });
-  }
   res.download(filePath);
 });
 
 // ─── GET /api/receipts/:id — Single Receipt ───────────────────────────────────
-router.get("/:id", protect, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const receipt = await Receipt.findById(req.params.id);
     if (!receipt)
@@ -159,14 +149,13 @@ router.get("/:id", protect, async (req, res) => {
 });
 
 // ─── PATCH /api/receipts/:id/status — Update Status ──────────────────────────
-router.patch("/:id/status", protect, async (req, res) => {
+router.patch("/:id/status", async (req, res) => {
   try {
     const { status, action } = req.body;
 
     const validStatuses = ["pending", "in_progress", "processed", "rejected", "forwarded"];
-    if (!validStatuses.includes(status)) {
+    if (!validStatuses.includes(status))
       return res.status(400).json({ success: false, message: "Invalid status" });
-    }
 
     const receipt = await Receipt.findById(req.params.id);
     if (!receipt)
@@ -175,8 +164,7 @@ router.patch("/:id/status", protect, async (req, res) => {
     receipt.status = status;
     receipt.actionLog.push({
       action: action || `Status changed to ${status}`,
-      updatedBy: req.user.id,
-      updatedByName: req.user.name,
+      updatedByName: "DEO",
     });
 
     await receipt.save();

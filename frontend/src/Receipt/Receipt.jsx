@@ -1,11 +1,12 @@
 import { useState } from "react";
+import axios from "axios";
+import API_BASE_URL from "../../config";
 import FormDateField from "./components/FormDateField";
 import FormSelectField from "./components/FormSelectField";
 import FormTextField from "./components/FormTextField";
 import FormFileUpload from "./components/FormFileUpload";
 import ReceiptFormActions from "./components/ReceiptFormActions";
 import { RECEIPT_MODE_OPTIONS, FORM_TYPE_OPTIONS } from "./receiptConstants";
-
 
 const initialForm = {
   receiptDate: new Date().toISOString().split("T")[0],
@@ -27,6 +28,7 @@ const Receipt = () => {
   const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,6 +52,7 @@ const Receipt = () => {
     setForm(initialForm);
     setFiles([]);
     setSuccessMsg("");
+    setErrorMsg("");
   };
 
   const handleSubmit = async (e) => {
@@ -57,54 +60,33 @@ const Receipt = () => {
 
     setIsSubmitting(true);
     setSuccessMsg("");
+    setErrorMsg("");
 
-     try 
-     {
-      const token = localStorage.getItem("token");
-      
-
-      const payload = {
-        ...form,
-        formType:
-          form.formType === "other"
-            ? form.formTypeOther
-            : form.formType,
-      };
-
+    try 
+    {
       const formData = new FormData();
+      formData.append("receiptDate",       form.receiptDate);
+      formData.append("receiptMode",       form.receiptMode);
+      formData.append("formType",          form.formType === "other" ? form.formTypeOther : form.formType);
+      formData.append("uan",               form.uan);
+      formData.append("memberId",          form.memberId);
+      formData.append("memberName",        form.memberName);
+      formData.append("mobile",            form.mobile);
+      formData.append("establishmentName", form.establishmentName);
+      formData.append("group",             form.group);
+      formData.append("task",              form.task);
+      formData.append("subject",           form.subject);
+      files.forEach((file) => formData.append("documents", file));
 
-      Object.keys(payload).forEach((key) => {
-        formData.append(key, payload[key]);
-      });
-
-      files.forEach((file) => {
-        formData.append("documents", file);
-      });
-
-      const { data } = await axios.post(
-        `${API_BASE_URL}/api/receipts`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const { data } = await axios.post(`${API_BASE_URL}/api/receipts`, formData,);
       
-      setSuccessMsg(
-        `Receipt saved successfully! Tapal No : ${data.data.taphalNo}`
-      );
-
+      setSuccessMsg(`Receipt saved successfully! Tapal No : ${data.data.taphalNo}`);
       setForm(initialForm);
       setFiles([]);
     } 
     catch (error) 
     {
-      alert(
-        error.response?.data?.message ||
-        "Failed to save receipt"
-      );
+      setErrorMsg(error.response?.data?.message || "Failed to save receipt. Please try again.");
     } 
     finally 
     {
