@@ -1,11 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-
-import {
-  HiOutlineDocumentArrowDown,
-  HiOutlineClipboardDocumentCheck,
-  HiOutlineDocumentChartBar,
-} from "react-icons/hi2";
+import { HiOutlineDocumentArrowDown,HiOutlineClipboardDocumentCheck, HiOutlineDocumentChartBar,} from "react-icons/hi2";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -46,7 +41,7 @@ const SideBar = () => {
         </div>
 
         {/* Menu */}
-        <ul className="flex flex-col gap-2 px-3 py-6">
+        <ul className="flex flex-col gap-4 px-3 py-6">
           {sidebarMenu.map(({ id, label, icon: Icon, path }) => (
             <li key={id}>
               <NavLink
@@ -60,8 +55,8 @@ const SideBar = () => {
                   }`
                 }
               >
-                <Icon className="text-xl" />
-                <span>{label}</span>
+                <Icon className="text-[22px]" />
+                <span className="text-[17px]">{label}</span>
               </NavLink>
             </li>
           ))}

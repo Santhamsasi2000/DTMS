@@ -1,7 +1,11 @@
 import { useRef } from "react";
-import { HiOutlineArrowUpTray, HiOutlineXCircle, HiOutlineDocument } from "react-icons/hi2";
+import {
+  HiOutlineArrowUpTray,
+  HiOutlineXCircle,
+  HiOutlineDocument,
+} from "react-icons/hi2";
 
-const FormFileUpload = ({ files, onChange, onRemove }) => {
+const FormFileUpload = ({ files, onChange, onRemove, error }) => {
   const inputRef = useRef(null);
 
   const handleChange = (e) => {
@@ -38,12 +42,15 @@ const FormFileUpload = ({ files, onChange, onRemove }) => {
         onClick={() => inputRef.current.click()}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className="border-2 border-dashed border-blue-200 rounded-2xl px-6 py-8
+        className={`border-2 border-dashed rounded-2xl px-6 py-8
           flex flex-col items-center gap-3 cursor-pointer group
-          hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-200 bg-white"
+          hover:border-blue-400 hover:bg-blue-50/50 transition-all duration-200 bg-white
+          ${error ? "border-red-400 bg-red-50/20" : "border-blue-200"}`}
       >
-        <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center
-          group-hover:bg-blue-100 transition-all duration-200">
+        <div
+          className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center
+          group-hover:bg-blue-100 transition-all duration-200"
+        >
           <HiOutlineArrowUpTray className="text-blue-500 text-2xl group-hover:scale-110 transition-transform duration-200" />
         </div>
         <div className="text-center">
@@ -51,7 +58,9 @@ const FormFileUpload = ({ files, onChange, onRemove }) => {
             Click to upload{" "}
             <span className="font-normal text-gray-400">or drag & drop</span>
           </p>
-          <p className="text-xs text-gray-400 mt-0.5">PDF, JPG, PNG supported</p>
+          <p className="text-xs text-gray-400 mt-0.5">
+            PDF, JPG, PNG supported
+          </p>
         </div>
         <input
           ref={inputRef}
@@ -62,6 +71,11 @@ const FormFileUpload = ({ files, onChange, onRemove }) => {
           onChange={handleChange}
         />
       </div>
+
+      {/* File error message */}
+      {error && (
+        <p className="text-xs text-red-500 mt-0.5">{error}</p>
+      )}
 
       {/* File list */}
       {files.length > 0 && (
@@ -76,7 +90,9 @@ const FormFileUpload = ({ files, onChange, onRemove }) => {
                 <HiOutlineDocument className="text-blue-600 text-base" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-800 truncate">{file.name}</p>
+                <p className="text-sm font-medium text-gray-800 truncate">
+                  {file.name}
+                </p>
                 <p className="text-xs text-gray-400">{formatSize(file.size)}</p>
               </div>
               <button
