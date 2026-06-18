@@ -87,7 +87,11 @@ const Receipt = () => {
 
         const { data } = await axios.post(
           `${API_BASE_URL}/api/receipts`,
-          formData
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+            // withCredentials: true, // enable only if you use cookies/sessions
+          }
         );
 
         setSuccessMsg(
@@ -96,9 +100,13 @@ const Receipt = () => {
         resetForm();
         setFiles([]);
         setFileError("");
-      } catch (error) {
-        setErrorMsg(
-          error.response?.data?.message || "Failed to save receipt."
+      } catch (error) 
+      {
+        console.log("UPLOAD ERROR:", error);
+        console.log("RESPONSE:", error.response?.data);
+        setErrorMsg
+        (
+          error.response?.data?.message || error.message || "Failed to save receipt."
         );
       } finally {
         setIsSubmitting(false);

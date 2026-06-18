@@ -21,10 +21,11 @@ const Acknowledgement = () => {
   const [actionModal, setActionModal] = useState(null); // { id, status, action }
 
   const handlePageChange = (page) => setFilters((p) => ({ ...p, page }));
-
-  const handleDownload = (filename) => 
+  
+  // ✅ Cloudinary URL — open directly in new tab
+  const handleDownload = (url) => 
   {
-    window.open(`${API}/api/receipts/file/${filename}`, "_blank");
+    window.open( url, "_blank");
   };
 
   const openActionModal = (receipt) => {
@@ -129,7 +130,7 @@ const Acknowledgement = () => {
                             {r.documents.map((doc, i) => (
                               <button
                                 key={i}
-                                onClick={() => handleDownload(doc.fileName)}
+                                onClick={() => handleDownload(doc.url)}
                                 title={doc.originalName}
                                 className="w-7 h-7 flex items-center justify-center rounded-lg
                                   bg-sky-50 border border-sky-200 text-sky-600

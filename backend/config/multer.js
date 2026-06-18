@@ -1,21 +1,37 @@
-// config/multer.js
-
-import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-import cloudinary from "./cloudinary.js";
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("./cloudinary");
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
-    folder: "epfo_receipts",         // Cloudinary folder name
-    allowed_formats: ["jpg", "jpeg", "png", "pdf"],
-    resource_type: "auto",           // auto handles pdf + images
+  params: async (req, file) => {
+    // ✅ Dynamically set resource_type based on file type
+    const isPDF = file.mimetype === "application/pdf";
+    return {
+      folder: "epfo_receipts",
+      resource_type: isPDF ? "raw" : "image", // ✅ PDF=raw, Image=image
+      public_id: `${Date.now()}-${file.originalname.replace(/\s+/g, "_")}`,
+    };
   },
 });
 
+// ✅ File filter — only allow PDF, JPG, PNG
+const fileFilter = (req, file, cb) => {
+  const allowed = ["application/pdf", "image/jpeg", "image/png"];
+  if (allowed.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only PDF, JPG, PNG files are allowed"), false);
+  }
+};
+
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB per file
+  fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB per file
+    files: 10,                   // Max 10 files
+  },
 });
 
-export default upload;
+module.exports = upload;
