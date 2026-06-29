@@ -1,6 +1,7 @@
 import { useReceipts }         from "../hooks/useReceipts";
 import TableSearch             from "../components/TableSearch";
-import ReportsExportButton     from "./components/ReportsExportButton";
+import ReportsExportPDFButton from "./Components/ReportsExportPDFButton";
+import ReportsExportExcelButton from "./Components/ReportsExportExcelButton";
 import ReportsSummaryCards     from "./components/ReportsSummaryCards";
 import ReportsTable            from "./components/ReportsTable";
 
@@ -18,24 +19,28 @@ const Reports = () => {
     setFilters((prev) => ({ ...prev, page }));
 
   return (
-    <div className="min-h-screen p-6 md:p-8 ">  
-      <div className="">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/60 via-white to-sky-50/40 p-6 md:p-8">
+      <div className="max-w-7xl mx-auto">
 
         {/* Page Header */}
         <div className="mb-6 flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-3xl text-blue-800 font-bold font-sora tracking-tight">
+              <div className="w-1 h-7 rounded-full bg-[#003B7A]" />
+              <h1 className="text-2xl font-bold text-[#003B7A] font-sora tracking-tight">
                 Reports
               </h1>
             </div>
-            <p className="text-gray-600">
-              View and export all tapal records with filters
+            <p className="text-sm text-gray-400 ml-4">
+              View and export all tapal records
             </p>
           </div>
 
-          {/* Export Button */}
-          <ReportsExportButton receipts={receipts} />
+          {/* ✅ Both Export Buttons */}
+          <div className="flex items-center gap-3">
+            <ReportsExportPDFButton receipts={receipts} />
+            <ReportsExportExcelButton   receipts={receipts} />
+          </div>
         </div>
 
         {/* Summary Cards */}

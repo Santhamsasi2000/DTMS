@@ -1,5 +1,5 @@
 const SUMMARY_CARDS = [
-  { key: "received1",     label: "Received1",     color: "bg-amber-50 border-amber-200 text-amber-700"},
+  { key: "received",     label: "Received233",     color: "bg-yellow-50 border-yellow-200 text-yellow-700"},
   { key: "completed", label: "Completed", color: "bg-blue-50 border-blue-200 text-blue-700"},
   { key: "rejected",    label: "Rejected",    color: "bg-red-50 border-red-200 text-red-600"},
 ];
