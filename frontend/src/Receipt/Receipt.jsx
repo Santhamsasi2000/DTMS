@@ -115,18 +115,17 @@ const Receipt = () => {
   });
 
   return (
-    <section className="p-6 min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="px-12 py-6 min-h-screen">
+      <div>
 
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-1 h-7 rounded-full bg-sky-800" />
             <h1 className="text-3xl font-bold text-blue-800 font-sora tracking-tight">
               Receipt Entry
             </h1>
           </div>
-          <p className="text-sm text-gray-600 ml-4">
+          <p className="text-gray-600">
             Register a new incoming tapal · Unique receipt number assigned
             automatically
           </p>
@@ -186,7 +185,7 @@ const Receipt = () => {
         {/* Form Card */}
         <form
           onSubmit={formik.handleSubmit}
-          className="bg-white/80 backdrop-blur-sm border border-gray-100 rounded-3xl
+          className="bg-white backdrop-blur-sm border border-gray-100 rounded-3xl
             shadow-xl overflow-hidden"
         >
           {/* Card Header Strip */}
@@ -196,10 +195,10 @@ const Receipt = () => {
 
             {/* Section 1 — Receipt Info */}
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
+              <p className="text-sm font-bold uppercase tracking-[0.15em] text-blue-400 mb-5">
                 Receipt Information
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormDateField
                   label="Receipt Date"
                   name="receiptDate"
@@ -229,7 +228,7 @@ const Receipt = () => {
                   value={formik.values.formType}
                   onChange={(e) => {
                     formik.handleChange(e);
-                    if (e.target.value !== "other") {
+                    if (e.target.value !== "Other") {
                       formik.setFieldValue("formTypeOther", "");
                     }
                   }}
@@ -252,10 +251,10 @@ const Receipt = () => {
 
             {/* Section 2 — Member Details */}
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
+              <p className="text-sm font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
                 Member Details
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <FormTextField
                   label="UAN Number"
                   name="uan"
@@ -285,10 +284,9 @@ const Receipt = () => {
                   error={
                     formik.touched.memberName && formik.errors.memberName
                   }
-                  required
                 />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormTextField
                   label="Mobile"
                   name="mobile"
@@ -299,7 +297,6 @@ const Receipt = () => {
                   type="tel"
                   maxLength={10}
                   error={formik.touched.mobile && formik.errors.mobile}
-                  required
                 />
                 <FormTextField
                   label="Establishment Name"
@@ -318,12 +315,12 @@ const Receipt = () => {
 
             <div className="border-t border-dashed border-gray-100" />
 
-            {/* Section 3 — Assignment */}
+            {/* Section 3 — Despatch Information */}
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
-                Assignment
+              <p className="text-sm font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
+                Despatch Information
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormTextField
                   label="Group"
                   name="group"
@@ -350,18 +347,19 @@ const Receipt = () => {
 
             {/* Section 4 — Subject & Documents */}
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
+              <p className="text-sm font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
                 Subject & Documents
               </p>
-              <div className="mb-4">
+              <div className="mb-8">
                 <FormTextField
-                  label="Subject (Optional)"
+                  label="Subject"
                   name="subject"
                   value={formik.values.subject}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   placeholder="Brief subject of the tapal"
                   error={formik.touched.subject && formik.errors.subject}
+                  required
                 />
               </div>
               <FormFileUpload
@@ -381,7 +379,7 @@ const Receipt = () => {
         </form>
 
         {/* Footer */}
-        <p className="text-center text-xs text-gray-300 mt-6">
+        <p className="text-center text-xs text-gray-500 mt-6">
           EPFO Regional Office, Chennai · Tapal Management System · Ministry of
           Labour & Employment
         </p>

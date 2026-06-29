@@ -42,8 +42,8 @@ const receiptSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "in_progress", "processed", "rejected", "forwarded"],
-      default: "pending",
+      enum: ["received", "completed", "rejected"],
+      default: "received",
     },
     actionLog: [
       {

@@ -13,10 +13,13 @@ const FormSelectField = ({
   error,
   otherError,
 }) => {
-  const showOther = value === "other";
+  // ✅ Show textbox when "Other" is selected
+  const showOther = value === "Other";
 
   return (
     <div className="flex flex-col gap-1.5">
+
+      {/* Label */}
       <label className="text-xs font-semibold uppercase tracking-widest text-blue-900/60">
         {label}{" "}
         {required && (
@@ -44,6 +47,8 @@ const FormSelectField = ({
             </option>
           ))}
         </select>
+
+        {/* Dropdown Arrow */}
         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-blue-400">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path
@@ -57,31 +62,33 @@ const FormSelectField = ({
         </span>
       </div>
 
-      {/* Dropdown error */}
+      {/* Dropdown Error */}
       {error && (
         <p className="text-xs text-red-500 mt-0.5">{error}</p>
       )}
 
-      {/* "Other" text box */}
+      {/* ✅ "Other" Textbox — shows only when Other is selected */}
       {showOther && (
-        <div className="mt-1 animate-[fadeIn_0.2s_ease]">
+        <div className="mt-2">
           <input
             type="text"
             name={otherName || `${name}_other`}
             value={otherValue}
             onChange={onOtherChange}
             onBlur={onOtherBlur}
-            placeholder="Please specify..."
-            className={`h-11 w-full px-4 rounded-xl border bg-blue-50/40 text-sm text-gray-800
-              placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30
-              focus:border-blue-500 hover:border-blue-400 transition-all duration-200
-              ${otherError ? "border-red-400 bg-red-50/30" : "border-blue-300"}`}
+            placeholder="Please specify form type..."
+            className={`h-11 w-full px-4 rounded-xl border text-sm text-gray-800
+              placeholder:text-gray-300 focus:outline-none focus:ring-2
+              focus:ring-blue-500/30 focus:border-blue-500
+              hover:border-blue-400 transition-all duration-200
+              ${otherError ? "border-red-400 bg-red-50/30" : "border-blue-300 bg-blue-50/40"}`}
           />
           {otherError && (
             <p className="text-xs text-red-500 mt-0.5">{otherError}</p>
           )}
         </div>
       )}
+
     </div>
   );
 };

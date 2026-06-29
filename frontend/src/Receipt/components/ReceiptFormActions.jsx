@@ -1,12 +1,12 @@
 const ReceiptFormActions = ({ onCancel, isSubmitting }) => {
   return (
-    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+    <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
       <button
         type="submit"
         disabled={isSubmitting}
         className="inline-flex items-center gap-2 px-7 py-2.5 rounded-xl
-          bg-[#003B7A] text-white text-sm font-semibold tracking-wide
-          hover:bg-[#004A9A] active:scale-[0.98] transition-all duration-200
+          bg-sky-600 text-white font-semibold tracking-wide
+          hover:bg-sky-700 active:scale-[0.98] transition-all duration-200
           disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-blue-900/20"
       >
         {isSubmitting ? (
@@ -51,8 +51,8 @@ const ReceiptFormActions = ({ onCancel, isSubmitting }) => {
       <button
         type="button"
         onClick={onCancel}
-        className="px-6 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-sm
-          font-medium hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700
+        className="px-6 py-2.5 rounded-xl border border-sky-200 text-blue-800 bg-sky-50
+          font-medium hover:bg-sky-100 hover:border-sky-300 hover:text-gray-700
           active:scale-[0.98] transition-all duration-200"
       >
         Cancel

@@ -1,4 +1,3 @@
-import './App.css'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import TapalLayout from './pages/TapalLayout'
 import Receipt from './Receipt/Receipt'

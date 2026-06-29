@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 
 export const receiptValidationSchema = Yup.object({
+
   receiptDate: Yup.date()
     .typeError("Receipt date is required")
     .required("Receipt date is required"),
@@ -12,13 +13,13 @@ export const receiptValidationSchema = Yup.object({
     .required("Form type is required"),
 
   formTypeOther: Yup.string().when("formType", {
-    is: "other",
+    is: "Other",
     then: (schema) =>
       schema.trim().required("Please specify the form type"),
     otherwise: (schema) => schema.notRequired(),
   }),
 
-  // ✅ UAN — valid only if entered, required if memberId is empty
+  // ✅ UAN — required if memberId is empty
   uan: Yup.string()
     .nullable()
     .notRequired()
@@ -26,7 +27,7 @@ export const receiptValidationSchema = Yup.object({
       "uan-format",
       "UAN must be exactly 12 digits",
       (value) => {
-        if (!value || value.trim() === "") return true; // optional if memberId filled
+        if (!value || value.trim() === "") return true;
         return /^\d{12}$/.test(value);
       }
     )
@@ -56,14 +57,31 @@ export const receiptValidationSchema = Yup.object({
       }
     ),
 
+  // ✅ Member Name — Optional, but if entered must be valid
   memberName: Yup.string()
-    .trim()
-    .required("Member name is required"),
+    .notRequired()
+    .nullable()
+    .test(
+      "memberName-format",
+      "Member name must contain only letters and spaces",
+      (value) => {
+        if (!value || value.trim() === "") return true; // Optional
+        return /^[a-zA-Z\s]+$/.test(value.trim());
+      }
+    ),
 
-  // ✅ Mobile — Required
+  // ✅ Mobile — Optional, but if entered must be 10 digits
   mobile: Yup.string()
-    .required("Mobile number is required")
-    .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits"),
+    .notRequired()
+    .nullable()
+    .test(
+      "mobile-format",
+      "Mobile number must be exactly 10 digits",
+      (value) => {
+        if (!value || value.trim() === "") return true; // Optional
+        return /^\d{10}$/.test(value);
+      }
+    ),
 
   // ✅ Establishment Name — Optional
   establishmentName: Yup.string().notRequired(),
@@ -75,5 +93,9 @@ export const receiptValidationSchema = Yup.object({
   // ✅ Task — Optional
   task: Yup.string().notRequired(),
 
-  subject: Yup.string().notRequired(),
+  // ✅ Subject — Required
+  subject: Yup.string()
+    .trim()
+    .required("Subject is required"),
+
 });

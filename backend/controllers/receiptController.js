@@ -19,16 +19,13 @@ const createReceipt = async (req, res) => {
     } = req.body;
 
     // ✅ Map Cloudinary uploaded files
-    const documents = (req.files || []).map((file) => {
-      console.log("Uploaded file:", file); // ✅ Check during testing
-      return {
-        originalName: file.originalname,
-        url:          file.path,        // Cloudinary secure URL
-        public_id:    file.filename,    // Cloudinary public_id
-        mimeType:     file.mimetype,
-        size:         file.size,
-      };
-    });
+    const documents = (req.files || []).map((file) => ({
+      originalName: file.originalname,
+      url:          file.path,
+      public_id:    file.filename,
+      mimeType:     file.mimetype,
+      size:         file.size,
+    }));
 
     const receipt = await Receipt.create({
       receiptDate,
@@ -43,8 +40,6 @@ const createReceipt = async (req, res) => {
       task,
       subject,
       documents,
-      createdByName: "DEO",
-      actionLog: [{ action: "Receipt created", updatedByName: "DEO" }],
     });
 
     res.status(201).json({ success: true, data: receipt });
@@ -53,22 +48,19 @@ const createReceipt = async (req, res) => {
   }
 };
 
-// ─── GET ALL Receipts (search + pagination) ───────────────────────────────────
+// ─── GET ALL Receipts (search + single date + pagination) ─────────────────────
 const getAllReceipts = async (req, res) => {
   try {
     const {
-      search    = "",
-      status,
-      group,
-      formType,
-      startDate,
-      endDate,
-      page      = 1,
-      limit     = 10,
+      search = "",
+      date   = "",   // ✅ Single date filter
+      page   = 1,
+      limit  = 10,
     } = req.query;
 
     const query = {};
 
+    // ✅ Search filter
     if (search) {
       query.$or = [
         { taphalNo:          { $regex: search, $options: "i" } },
@@ -77,16 +69,23 @@ const getAllReceipts = async (req, res) => {
         { memberName:        { $regex: search, $options: "i" } },
         { establishmentName: { $regex: search, $options: "i" } },
         { group:             { $regex: search, $options: "i" } },
+        { subject:           { $regex: search, $options: "i" } },
+        { taphalNo:          { $regex: search, $options: "i" } },
       ];
     }
 
-    if (status)               query.status   = status;
-    if (group)                query.group    = { $regex: group, $options: "i" };
-    if (formType)             query.formType = formType;
-    if (startDate || endDate) {
-      query.receiptDate = {};
-      if (startDate) query.receiptDate.$gte = new Date(startDate);
-      if (endDate)   query.receiptDate.$lte = new Date(endDate);
+    // ✅ Single date filter — matches full day
+    if (date) {
+      const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
+
+      const end = new Date(date);
+      end.setHours(23, 59, 59, 999);
+
+      query.receiptDate = {
+        $gte: start,
+        $lte: end,
+      };
     }
 
     const skip     = (Number(page) - 1) * Number(limit);
@@ -130,7 +129,9 @@ const updateReceiptStatus = async (req, res) => {
     const { status, action } = req.body;
 
     const validStatuses = [
-      "pending", "in_progress", "processed", "rejected", "forwarded",
+      "received",
+      "completed",
+      "rejected",
     ];
 
     if (!validStatuses.includes(status))
@@ -164,7 +165,6 @@ const deleteDocument = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Receipt not found" });
 
-    // Find document
     const doc = receipt.documents.id(docId);
     if (!doc)
       return res
@@ -182,7 +182,6 @@ const deleteDocument = async (req, res) => {
 
       console.log(`✅ Deleted from Cloudinary: ${doc.public_id}`);
     } catch (cloudinaryErr) {
-      // ⚠️ Don't block MongoDB delete if Cloudinary fails
       console.error("Cloudinary delete error:", cloudinaryErr.message);
     }
 

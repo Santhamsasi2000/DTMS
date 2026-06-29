@@ -30,7 +30,7 @@ const FormFileUpload = ({ files, onChange, onRemove, error }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-xs font-semibold uppercase tracking-widest text-blue-900/60">
+      <label className="font-semibold uppercase tracking-widest text-blue-900/60 mb-2">
         Documents{" "}
         <span className="normal-case tracking-normal font-normal text-gray-400">
           (PDF, JPG, PNG · max 10 files)

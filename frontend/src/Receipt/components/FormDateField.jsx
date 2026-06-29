@@ -11,12 +11,13 @@ const FormDateField = ({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-semibold uppercase tracking-widest text-blue-900/60">
+      <label className="font-semibold uppercase tracking-widest text-blue-900/60 mb-2">
         {label}{" "}
         {required && (
           <span className="text-red-500 normal-case tracking-normal">*</span>
         )}
       </label>
+      
       <input
         type="date"
         name={name}

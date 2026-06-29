@@ -10,11 +10,7 @@ export const useReceipts = () => {
 
   const [filters, setFilters] = useState({
     search: "",
-    status: "",
-    group: "",
-    formType: "",
-    startDate: "",
-    endDate: "",
+    date: "",
     page: 1,
     limit: 10,
   });
