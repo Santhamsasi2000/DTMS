@@ -1,9 +1,9 @@
 import { useReceipts }         from "../hooks/useReceipts";
-import TableSearch             from "../components/TableSearch";
+import TableSearch             from "../Components/TableSearch";
 import ReportsExportPDFButton from "./Components/ReportsExportPDFButton";
 import ReportsExportExcelButton from "./Components/ReportsExportExcelButton";
-import ReportsSummaryCards     from "./components/ReportsSummaryCards";
-import ReportsTable            from "./components/ReportsTable";
+import ReportsSummaryCards     from "./Components/ReportsSummaryCards";
+import ReportsTable            from "./Components/ReportsTable";
 
 const Reports = () => {
   const {
