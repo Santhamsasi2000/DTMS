@@ -181,11 +181,11 @@ const ReportsExportPDFButton = ({ receipts }) => {
       onClick={handleExportPDF}
       disabled={!receipts.length}
       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
-        bg-red-600 text-white text-sm font-semibold
-        hover:bg-red-700 active:scale-[0.98] transition-all shadow-sm
+        bg-blue-600 text-white text-lg font-semibold
+        hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm
         disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      <HiOutlineDocumentArrowDown className="text-base" />
+      <HiOutlineDocumentArrowDown className="text-xl" />
       Export PDF
     </button>
   );

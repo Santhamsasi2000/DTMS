@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express"); 
 const cors = require("cors"); 
 const path = require("path"); 
+
 const connectDB = require("./config/db"); 
 const receiptRoutes = require("./routes/receiptRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -16,7 +17,8 @@ app.use(cors(
     credentials: true, } 
   )); 
 
-app.use(express.json()); app.use(express.urlencoded({ extended: true })); 
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
 
 // Routes 
 app.use("/api/auth", authRoutes)

@@ -4,7 +4,11 @@ const userSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true, trim: true },
     passwordHash: { type: String, required: true },
-    role: { type: String, enum: ["DEO", "STAFF"], required: true },
+    role: { 
+      type: String, 
+      enum: ["RECEIPT", "ACKNOWLEDGE", "REPORTS"], 
+      required: true 
+    },
   },
   { timestamps: true }
 );

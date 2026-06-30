@@ -52,6 +52,15 @@ export const useReceipts = () => {
     }
   };
 
+  const deleteReceipt = async (id) => {
+    try {
+      await axiosClient.delete(`/api/receipts/${id}`);
+      fetchReceipts();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete receipt");
+    }
+  };
+
   return {
     receipts,
     pagination,
@@ -61,5 +70,6 @@ export const useReceipts = () => {
     setFilters,
     fetchReceipts,
     updateStatus,
+    deleteReceipt
   };
 };

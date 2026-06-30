@@ -1,7 +1,7 @@
 const SUMMARY_CARDS = [
-  { key: "received",     label: "Received233",     color: "bg-yellow-50 border-yellow-200 text-yellow-700"},
-  { key: "completed", label: "Completed", color: "bg-blue-50 border-blue-200 text-blue-700"},
-  { key: "rejected",    label: "Rejected",    color: "bg-red-50 border-red-200 text-red-600"},
+  { key: "received",     label: "Received",     color: "bg-yellow-50 border-yellow-300 text-yellow-700"},
+  { key: "completed", label: "Completed", color: "bg-blue-50 border-blue-300 text-blue-700"},
+  { key: "rejected",    label: "Rejected",    color: "bg-red-50 border-red-300 text-red-700"},
 ];
 
 const ReportsSummaryCards = ({ receipts, filters, setFilters }) => {
@@ -21,7 +21,7 @@ const ReportsSummaryCards = ({ receipts, filters, setFilters }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-8 mb-5">
+    <div className="grid grid-cols-3 gap-10 mb-8">
       {SUMMARY_CARDS.map(({ key, label, color }) => (
         <div
           key={key}
@@ -30,10 +30,10 @@ const ReportsSummaryCards = ({ receipts, filters, setFilters }) => {
             hover:scale-[1.02] ${color}
             ${filters.status === key ? "ring-2 ring-offset-1 ring-current" : ""}`}
         >
-          <p className="text-2xl font-bold">
+          <p className="text-3xl font-bold">
             {statusCounts[key] || 0}
           </p>
-          <p className="text-xs font-semibold mt-0.5 opacity-80">
+          <p className="font-semibold mt-0.5">
             {label}
           </p>
         </div>

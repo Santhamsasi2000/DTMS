@@ -11,35 +11,35 @@ const {
   getReceiptById,
   updateReceiptStatus,
   deleteDocument,
+  deleteReceipt
 } = require("../controllers/receiptController");
 
-// ✅ Both can view list + single + reports usage
-router.get("/", auth, authorizeRoles("DEO", "STAFF"), getAllReceipts);
-router.get("/:id", auth, authorizeRoles("DEO", "STAFF"), getReceiptById);
 
-// ✅ Only DEO can create receipt
-router.post(
-  "/",
-  auth,
-  authorizeRoles("DEO"),
-  upload.array("documents", 10),
-  createReceipt
-);
+router.get("/", auth, authorizeRoles("RECEIPT", "ACKNOWLEDGE", "REPORTS"), getAllReceipts);
+router.get("/:id", auth, authorizeRoles("RECEIPT", "ACKNOWLEDGE", "REPORTS" ), getReceiptById);
 
-// ✅ Only STAFF can update status (Acknowledgement)
+router.post("/", auth, authorizeRoles("RECEIPT"), upload.array("documents", 10), createReceipt );
+
 router.patch(
   "/:id/status",
   auth,
-  authorizeRoles("STAFF"),
+  authorizeRoles("ACKNOWLEDGE"),
   updateReceiptStatus
 );
 
-// ✅ Optional: only STAFF can delete documents
 router.delete(
   "/:id/documents/:docId",
   auth,
-  authorizeRoles("STAFF"),
+  authorizeRoles("ACKNOWLEDGE"),
   deleteDocument
+);
+
+// ✅ Only RECEIPT role can delete (recommended)
+router.delete(
+  "/:id",
+  auth,
+  authorizeRoles("RECEIPT"),
+  deleteReceipt
 );
 
 module.exports = router;

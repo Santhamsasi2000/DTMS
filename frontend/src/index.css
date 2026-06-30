@@ -38,7 +38,7 @@
   --breakpoint-2xl: 1440px; /* 2X large screens */
   
   /* ===== Fonts ==== */
-  --font-sora: "Sora", sans-serif;
+  --font-kurale: "Lora", serif;
 }
 
 html 
@@ -54,5 +54,5 @@ html
 
 body
 {
-     font-family: "Inter", sans-serif;
+    font-family: "Source Sans 3", sans-serif;
 }

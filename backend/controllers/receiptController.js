@@ -195,10 +195,37 @@ const deleteDocument = async (req, res) => {
   }
 };
 
+// DELETE Receipt (also deletes documents from Cloudinary)
+const deleteReceipt = async (req, res) => {
+  try {
+    const receipt = await Receipt.findById(req.params.id);
+    if (!receipt) {
+      return res.status(404).json({ success: false, message: "Receipt not found" });
+    }
+
+    // delete all cloudinary files (if any)
+    const docs = receipt.documents || [];
+    await Promise.allSettled(
+      docs.map((doc) =>
+        cloudinary.uploader.destroy(doc.public_id, {
+          resource_type: doc.mimeType === "application/pdf" ? "raw" : "image",
+        })
+      )
+    );
+
+    await receipt.deleteOne();
+
+    res.json({ success: true, message: "Receipt deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 module.exports = {
   createReceipt,
   getAllReceipts,
   getReceiptById,
   updateReceiptStatus,
   deleteDocument,
+  deleteReceipt,
 };

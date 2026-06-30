@@ -41,11 +41,11 @@ const ReportsExportExcelButton = ({ receipts }) => {
       onClick={handleExportExcel}
       disabled={!receipts?.length}
       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
-        bg-green-700 text-white text-sm font-semibold
-        hover:bg-green-800 active:scale-[0.98] transition-all shadow-sm
+        bg-sky-700 text-white text-lg font-semibold
+        hover:bg-sky-800 active:scale-[0.98] transition-all shadow-sm
         disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      <HiOutlineDocumentArrowDown className="text-base" />
+      <HiOutlineDocumentArrowDown className="text-xl" />
       Export Excel
     </button>
   );

@@ -13,31 +13,31 @@ const Reports = () => {
     error,
     filters,
     setFilters,
+    deleteReceipt
   } = useReceipts();
 
   const handlePageChange = (page) =>
     setFilters((prev) => ({ ...prev, page }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/60 via-white to-sky-50/40 p-6 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen p-6">
+      <div>
 
         {/* Page Header */}
         <div className="mb-6 flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <div className="w-1 h-7 rounded-full bg-[#003B7A]" />
-              <h1 className="text-2xl font-bold text-[#003B7A] font-sora tracking-tight">
+              <h1 className="text-4xl font-bold text-blue-800 font-kurale">
                 Reports
               </h1>
             </div>
-            <p className="text-sm text-gray-400 ml-4">
+            <p className="text-gray-500 text-lg">
               View and export all tapal records
             </p>
           </div>
 
-          {/* ✅ Both Export Buttons */}
-          <div className="flex items-center gap-3">
+          {/* ✅ Both Export Buttons */}  
+          <div className="flex items-center gap-10">
             <ReportsExportPDFButton receipts={receipts} />
             <ReportsExportExcelButton   receipts={receipts} />
           </div>
@@ -68,6 +68,7 @@ const Reports = () => {
             filters={filters}
             pagination={pagination}
             onPageChange={handlePageChange}
+            onDelete={deleteReceipt}
           />
         </div>
 

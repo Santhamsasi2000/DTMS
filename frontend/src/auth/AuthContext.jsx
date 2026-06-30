@@ -5,7 +5,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(() => {
     const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user  = JSON.parse(localStorage.getItem("user") || "null");
     return token && user ? { token, user } : { token: null, user: null };
   });
 
@@ -23,7 +23,11 @@ export const AuthProvider = ({ children }) => {
 
   const value = useMemo(() => ({ ...auth, login, logout }), [auth]);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);
