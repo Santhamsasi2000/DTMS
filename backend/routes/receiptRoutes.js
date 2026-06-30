@@ -1,6 +1,9 @@
-const express  = require("express");
-const router   = express.Router();
-const upload   = require("../config/multer");  // ✅ Cloudinary multer
+const express = require("express");
+const router = express.Router();
+const upload = require("../config/multer");
+
+const auth = require("../middleware/auth");
+const authorizeRoles = require("../middleware/authorizeRoles");
 
 const {
   createReceipt,
@@ -10,15 +13,33 @@ const {
   deleteDocument,
 } = require("../controllers/receiptController");
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
+// ✅ Both can view list + single + reports usage
+router.get("/", auth, authorizeRoles("DEO", "STAFF"), getAllReceipts);
+router.get("/:id", auth, authorizeRoles("DEO", "STAFF"), getReceiptById);
 
-// Create Receipt — multer uploads to Cloudinary automatically
-router.post(   "/",                        upload.array("documents", 10), createReceipt      );
-router.get(    "/",                                                        getAllReceipts      );
-router.get(    "/:id",                                                     getReceiptById     );
-router.patch(  "/:id/status",                                              updateReceiptStatus);
+// ✅ Only DEO can create receipt
+router.post(
+  "/",
+  auth,
+  authorizeRoles("DEO"),
+  upload.array("documents", 10),
+  createReceipt
+);
 
-// ✅ Delete single document from Cloudinary + MongoDB
-router.delete( "/:id/documents/:docId",                                    deleteDocument     );
+// ✅ Only STAFF can update status (Acknowledgement)
+router.patch(
+  "/:id/status",
+  auth,
+  authorizeRoles("STAFF"),
+  updateReceiptStatus
+);
+
+// ✅ Optional: only STAFF can delete documents
+router.delete(
+  "/:id/documents/:docId",
+  auth,
+  authorizeRoles("STAFF"),
+  deleteDocument
+);
 
 module.exports = router;

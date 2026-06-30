@@ -4,11 +4,14 @@ const cors = require("cors");
 const path = require("path"); 
 const connectDB = require("./config/db"); 
 const receiptRoutes = require("./routes/receiptRoutes");
-const cloudinary = require("./config/cloudinary")
+const authRoutes = require("./routes/authRoutes");
+const cloudinary = require("./config/cloudinary");
 
 connectDB(); 
 
-const app = express(); app.use(cors( 
+const app = express(); 
+
+app.use(cors( 
   { origin: "http://localhost:5173", 
     credentials: true, } 
   )); 
@@ -16,6 +19,7 @@ const app = express(); app.use(cors(
 app.use(express.json()); app.use(express.urlencoded({ extended: true })); 
 
 // Routes 
+app.use("/api/auth", authRoutes)
 app.use("/api/receipts", receiptRoutes);
 
 app.get("/", (req, res) => res.send("EPFO Tapal Backend Running"));
