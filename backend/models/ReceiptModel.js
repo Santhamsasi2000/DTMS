@@ -13,7 +13,7 @@ const receiptSchema = new mongoose.Schema(
     receiptMode: {
       type: String,
       required: true,
-      enum: ["post", "hand", "email", "courier"],
+      enum: ["post", "byHand", "counter", "courier"],
     },
     formType: {
       type: String,

@@ -1,6 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
-import API_BASE_URL from "../config";
 import { useFormik } from "formik";
 import { receiptValidationSchema } from "./receiptValidation";
 import FormDateField from "./components/FormDateField";
@@ -9,6 +7,7 @@ import FormTextField from "./components/FormTextField";
 import FormFileUpload from "./components/FormFileUpload";
 import ReceiptFormActions from "./components/ReceiptFormActions";
 import { RECEIPT_MODE_OPTIONS, FORM_TYPE_OPTIONS } from "./receiptConstants";
+import axiosClient from "../api/axiosClient";
 
 const initialForm = {
   receiptDate: new Date().toISOString().split("T")[0],
@@ -85,12 +84,11 @@ const Receipt = () => {
 
         files.forEach((file) => formData.append("documents", file));
 
-        const { data } = await axios.post(
-          `${API_BASE_URL}/api/receipts`,
+        const { data } = await axiosClient.post(
+          "/api/receipts",
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
-            // withCredentials: true, // enable only if you use cookies/sessions
           }
         );
 

@@ -67,10 +67,10 @@ const Login = () => {
 
   // ✅ Input class helper
   const inputClass = (field) =>
-    `w-full border rounded-2xl px-4 py-3 outline-none transition text-sm ${
+    `w-full border rounded-2xl px-4 py-3 outline-none transition  ${
       formik.touched[field] && formik.errors[field]
         ? "border-red-400 bg-red-50"
-        : "border-gray-200 focus:border-sky-500 bg-white"
+        : "border-gray-300 focus:border-sky-500 bg-white"
     }`;
 
   return (
@@ -83,13 +83,13 @@ const Login = () => {
             <img
               src="/logo.png"
               alt="EPFO Logo"
-              className="w-12 h-12 rounded-full object-cover"
+              className="w-13 h-13 rounded-full object-cover"
             />
           </div>
-          <h1 className="text-white text-2xl font-bold font-sora">
+          <h1 className="text-white text-2xl font-bold font-lora">
             EPFO Regional Office, Chennai
           </h1>
-          <p className="text-sky-100 mt-1 text-sm">
+          <p className="text-sky-100 mt-2">
             Digital Tapal Management System
           </p>
         </div>
@@ -97,7 +97,7 @@ const Login = () => {
         {/* ── Form ── */}
         <div className="px-8 py-8">
 
-          <h2 className="text-xl font-bold text-[#0f172a] mb-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-6">
             Sign in to continue
           </h2>
 
@@ -111,7 +111,7 @@ const Login = () => {
 
           {/* Username */}
           <div className="mb-5">
-            <label className="text-sm text-gray-500 mb-2 block">
+            <label className="text-gray-500 mb-2 block">
               Username
             </label>
             <input
@@ -124,7 +124,7 @@ const Login = () => {
               className={inputClass("username")}
             />
             {formik.touched.username && formik.errors.username && (
-              <p className="text-red-500 text-xs mt-1.5 pl-1">
+              <p className="text-red-500 text-sm mt-1.5 pl-1">
                 {formik.errors.username}
               </p>
             )}
@@ -132,7 +132,7 @@ const Login = () => {
 
           {/* Password */}
           <div className="mb-6">
-            <label className="text-sm text-gray-500 mb-2 block">
+            <label className="text-gray-500 mb-2 block">
               Password
             </label>
             <div className="relative">
@@ -164,7 +164,7 @@ const Login = () => {
 
           {/* ✅ Role Dropdown */}
           <div className="mb-6">
-            <label className="text-sm text-gray-500 mb-2 block">Role</label>
+            <label className="text-gray-500 mb-2 block">Role</label>
             <select
               name="role"
               value={formik.values.role}
@@ -180,7 +180,7 @@ const Login = () => {
               ))}
             </select>
             {formik.touched.role && formik.errors.role && (
-              <p className="text-red-500 text-xs mt-1.5 pl-1">{formik.errors.role}</p>
+              <p className="text-red-500 text-sm mt-1.5 pl-1">{formik.errors.role}</p>
             )}
           </div>
 
