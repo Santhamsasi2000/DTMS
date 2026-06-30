@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useReceipts } from "../hooks/useReceipts";
 import TableSearch from "../components/TableSearch";
-import AcknowledgementTable       from "./components/AcknowledgementTable";
-import AcknowledgementActionModal from "./components/AcknowledgementActionModal";
+import AcknowledgementTable       from "./Components/AcknowledgementTable";
+import AcknowledgementActionModal from "./Components/AcknowledgementActionModal";
 
 const Acknowledgement = () => {
   const {

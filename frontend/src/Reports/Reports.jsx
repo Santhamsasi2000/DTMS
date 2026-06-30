@@ -1,5 +1,5 @@
 import { useReceipts }         from "../hooks/useReceipts";
-import TableSearch             from "../Components/TableSearch";
+import TableSearch             from "../components/TableSearch";
 import ReportsExportPDFButton from "./Components/ReportsExportPDFButton";
 import ReportsExportExcelButton from "./Components/ReportsExportExcelButton";
 import ReportsSummaryCards     from "./Components/ReportsSummaryCards";
