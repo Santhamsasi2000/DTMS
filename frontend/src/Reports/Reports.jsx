@@ -26,8 +26,8 @@ const Reports = () => {
         {/* Page Header */}
         <div className="mb-6 flex items-start justify-between">
           <div>
-            <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-4xl font-bold text-blue-800 font-kurale">
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-4xl font-bold text-blue-800 font-lora">
                 Reports
               </h1>
             </div>

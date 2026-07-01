@@ -12,10 +12,11 @@ import axiosClient from "../api/axiosClient";
 const initialForm = {
   receiptDate: new Date().toISOString().split("T")[0],
   receiptMode: "",
+  trackingNo: "",
   formType: "",
   formTypeOther: "",
   uan: "",
-  memberId: "",
+  memberOrEstablishmentId: "",
   memberName: "",
   mobile: "",
   establishmentName: "",
@@ -23,6 +24,7 @@ const initialForm = {
   task: "",
   subject: "",
 };
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 const Receipt = () => {
   const [files, setFiles] = useState([]);
@@ -32,8 +34,13 @@ const Receipt = () => {
   const [fileError, setFileError] = useState("");
 
   const handleFilesAdd = (newFiles) => {
+    const tooLarge = newFiles.find(f => f.size > MAX_FILE_SIZE);
+    if (tooLarge) 
+    {
+      setFileError(`"${tooLarge.name}" is bigger than 10 MB. Please upload below 10 MB.`);
+      return;
+    }
     setFiles((prev) => [...prev, ...newFiles].slice(0, 10));
-    // Clear file error when file is added
     setFileError("");
   };
 
@@ -75,9 +82,12 @@ const Receipt = () => {
         const formData = new FormData();
 
         Object.entries(values).forEach(([key, value]) => {
-          if (key === "formType" && value === "other") {
+          if (key === "formType" && value === "Other") 
+          {
             formData.append("formType", values.formTypeOther);
-          } else if (key !== "formTypeOther") {
+          } 
+          else if (key !== "formTypeOther") 
+          {
             formData.append(key, value);
           }
         });
@@ -212,7 +222,16 @@ const Receipt = () => {
                   label="Receipt Mode"
                   name="receiptMode"
                   value={formik.values.receiptMode}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+
+                    const mode = e.target.value;
+                    const needsTracking = mode === "post" || mode === "courier";
+
+                    if (!needsTracking) {
+                      formik.setFieldValue("trackingNo", "");
+                    }
+                  }}
                   onBlur={formik.handleBlur}
                   options={RECEIPT_MODE_OPTIONS}
                   error={
@@ -220,6 +239,21 @@ const Receipt = () => {
                   }
                   required
                 />
+
+                  {(formik.values.receiptMode === "post" || formik.values.receiptMode === "courier") && 
+                  (
+                    <FormTextField
+                      label="Tracking No"
+                      name="trackingNo"
+                      value={formik.values.trackingNo}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      placeholder="Enter tracking / consignment number"
+                      error={formik.touched.trackingNo && formik.errors.trackingNo}
+                      required
+                    />
+                  )}
+
                 <FormSelectField
                   label="Form Type"
                   name="formType"
@@ -252,7 +286,7 @@ const Receipt = () => {
               <p className="text-sm font-bold uppercase tracking-[0.15em] text-blue-400 mb-4">
                 Member Details
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <FormTextField
                   label="UAN Number"
                   name="uan"
@@ -264,15 +298,20 @@ const Receipt = () => {
                   error={formik.touched.uan && formik.errors.uan}
                 />
                 <FormTextField
-                  label="Member ID"
-                  name="memberId"
-                  value={formik.values.memberId}
+                  label="Member ID / Establishment ID"
+                  name="memberOrEstablishmentId"
+                  value={formik.values.memberOrEstablishmentId}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  placeholder="Member ID"
-                  error={formik.touched.memberId && formik.errors.memberId}
+                  placeholder="Member ID or Establishment ID"
+                  error={
+                    formik.touched.memberOrEstablishmentId &&
+                    formik.errors.memberOrEstablishmentId
+                  }
                 />
-                <FormTextField
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <FormTextField
                   label="Member Name"
                   name="memberName"
                   value={formik.values.memberName}
@@ -283,8 +322,6 @@ const Receipt = () => {
                     formik.touched.memberName && formik.errors.memberName
                   }
                 />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormTextField
                   label="Mobile"
                   name="mobile"
@@ -295,18 +332,6 @@ const Receipt = () => {
                   type="tel"
                   maxLength={10}
                   error={formik.touched.mobile && formik.errors.mobile}
-                />
-                <FormTextField
-                  label="Establishment Name"
-                  name="establishmentName"
-                  value={formik.values.establishmentName}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  placeholder="Company / Establishment"
-                  error={
-                    formik.touched.establishmentName &&
-                    formik.errors.establishmentName
-                  }
                 />
               </div>
             </div>

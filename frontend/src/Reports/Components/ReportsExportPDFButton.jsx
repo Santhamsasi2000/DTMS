@@ -57,7 +57,7 @@ const ReportsExportPDFButton = ({ receipts }) => {
       { header: "Form Type",    dataKey: "formType" },
       { header: "Member Name",  dataKey: "memberName"},
       { header: "UAN",          dataKey: "uan"      },
-      { header: "Member ID",    dataKey: "memberId" },
+      { header: "Member/Estab ID",  dataKey: "memberOrEstablishmentId" },
       { header: "Mobile",       dataKey: "mobile"   },
       { header: "Group",        dataKey: "group"    },
       { header: "Task",         dataKey: "task"     },
@@ -67,13 +67,12 @@ const ReportsExportPDFButton = ({ receipts }) => {
 
     const rows = receipts.map((r, idx) => ({
       sno:        idx + 1,
-      taphalNo:   r.taphalNo   || "—",
       date:       new Date(r.receiptDate).toLocaleDateString("en-IN"),
       mode:       RECEIPT_MODE_LABELS[r.receiptMode] || r.receiptMode || "—",
       formType:   r.formType   || "—",
       memberName: r.memberName || "—",
       uan:        r.uan        || "—",
-      memberId:   r.memberId   || "—",
+      memberOrEstablishmentId: r.memberOrEstablishmentId || "—",
       mobile:     r.mobile     || "—",
       group:      r.group      || "—",
       task:       r.task       || "—",

@@ -7,12 +7,12 @@ const createReceipt = async (req, res) => {
     const {
       receiptDate,
       receiptMode,
+      trackingNo,
       formType,
       uan,
-      memberId,
+      memberOrEstablishmentId,
       memberName,
       mobile,
-      establishmentName,
       group,
       task,
       subject,
@@ -30,12 +30,12 @@ const createReceipt = async (req, res) => {
     const receipt = await Receipt.create({
       receiptDate,
       receiptMode,
+      trackingNo,
       formType,
       uan,
-      memberId,
+      memberOrEstablishmentId,
       memberName,
       mobile,
-      establishmentName,
       group,
       task,
       subject,
@@ -65,9 +65,9 @@ const getAllReceipts = async (req, res) => {
       query.$or = [
         { taphalNo:          { $regex: search, $options: "i" } },
         { uan:               { $regex: search, $options: "i" } },
-        { memberId:          { $regex: search, $options: "i" } },
+        {trackingNo:         { $regex: search, $options: "i" } },
+        { memberOrEstablishmentId:          { $regex: search, $options: "i" } },
         { memberName:        { $regex: search, $options: "i" } },
-        { establishmentName: { $regex: search, $options: "i" } },
         { group:             { $regex: search, $options: "i" } },
         { subject:           { $regex: search, $options: "i" } },
         { taphalNo:          { $regex: search, $options: "i" } },
@@ -142,11 +142,6 @@ const updateReceiptStatus = async (req, res) => {
       return res.status(404).json({ success: false, message: "Receipt not found" });
 
     receipt.status = status;
-    receipt.actionLog.push({
-      action:        action || `Status changed to ${status}`,
-      updatedByName: "DEO",
-    });
-
     await receipt.save();
     res.json({ success: true, data: receipt });
   } catch (err) {

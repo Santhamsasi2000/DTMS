@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 const receiptSchema = new mongoose.Schema(
   {
-    taphalNo: {
-      type: String,
-      unique: true,
-    },
     receiptDate: {
       type: Date,
       required: true,
@@ -15,16 +11,16 @@ const receiptSchema = new mongoose.Schema(
       required: true,
       enum: ["post", "byHand", "counter", "courier"],
     },
+    trackingNo: { type: String, trim: true },
     formType: {
       type: String,
       required: false,
       trim: true,
     },
     uan:               { type: String, trim: true },
-    memberId:          { type: String, trim: true },
+    memberOrEstablishmentId:          { type: String, trim: true },
     memberName:        { type: String, trim: true },
     mobile:            { type: String, trim: true },
-    establishmentName: { type: String, trim: true },
     group:             { type: String, required: true, trim: true },
     task:              { type: String, trim: true },
     subject:           { type: String, trim: true },

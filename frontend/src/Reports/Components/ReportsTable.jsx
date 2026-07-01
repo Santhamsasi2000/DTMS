@@ -11,8 +11,8 @@ const RECEIPT_MODE_LABELS = {
 };
 
 const TABLE_HEADERS = [
-  "#", "Tapal No.", "Date", "Mode", "Form Type",
-  "Member Name", "UAN", "Group", "Task", "Establishment", "Status", "Delete",
+  "#", "Date", "Mode", "Tracking No.", "Form Type",
+  "Member Name", "UAN", "Member/Estab. ID",  "Group", "Task", "Status", "Delete",
 ];
 
 const ReportsTable = ({
@@ -86,14 +86,6 @@ const ReportsTable = ({
                   {(filters.page - 1) * filters.limit + idx + 1}
                 </td>
 
-                {/* Tapal No */}
-                <td className="px-4 py-3">
-                  <span className="font-mono font-semibold text-blue-700
-                    bg-blue-50 px-2 py-0.5 rounded-lg">
-                    {r.taphalNo}
-                  </span>
-                </td>
-
                 {/* Date */}
                 <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
                   {new Date(r.receiptDate).toLocaleDateString("en-IN")}
@@ -102,6 +94,11 @@ const ReportsTable = ({
                 {/* Mode */}
                 <td className="px-4 py-3 text-gray-500">
                   {RECEIPT_MODE_LABELS[r.receiptMode] || r.receiptMode}
+                </td>
+
+                {/* Tracking No */}
+                <td className="px-4 py-3 font-mono text-xs text-gray-500 max-w-[140px] truncate">
+                  {r.trackingNo || <span className="text-gray-300">—</span>}
                 </td>
 
                 {/* Form Type */}
@@ -132,10 +129,10 @@ const ReportsTable = ({
                   {r.task || <span className="text-gray-300">—</span>}
                 </td>
 
-                {/* Establishment */}
+                {/* Member/Establishment ID */}
                 <td className="px-4 py-3 text-gray-500 max-w-[140px] truncate">
-                  {r.establishmentName || <span className="text-gray-300">—</span>}
-                </td>
+                 {r.memberOrEstablishmentId || <span className="text-gray-300">—</span>}
+               </td>
 
                 {/* Status */}
                 <td className="px-4 py-3">

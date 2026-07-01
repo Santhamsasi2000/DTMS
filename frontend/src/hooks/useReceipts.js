@@ -43,11 +43,13 @@ export const useReceipts = () => {
     fetchReceipts();
   }, [fetchReceipts]);
 
-  const updateStatus = async (id, status, action = "") => {
+  const updateStatus = async (id, status) => {
     try {
-      await axiosClient.patch(`/api/receipts/${id}/status`, { status, action });
+      await axiosClient.patch(`/api/receipts/${id}/status`, { status });
       fetchReceipts();
     } catch (err) {
+       console.log("Status Update Error:", err);
+       console.log("Response:", err.response?.data);
       alert(err.response?.data?.message || "Failed to update status");
     }
   };

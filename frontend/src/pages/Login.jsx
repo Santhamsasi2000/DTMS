@@ -67,7 +67,7 @@ const Login = () => {
 
   // ✅ Input class helper
   const inputClass = (field) =>
-    `w-full border rounded-2xl px-4 py-3 outline-none transition  ${
+    `w-full border rounded-2xl px-4 py-3 outline-none transition text-gray-600 ${
       formik.touched[field] && formik.errors[field]
         ? "border-red-400 bg-red-50"
         : "border-gray-300 focus:border-sky-500 bg-white"
@@ -111,7 +111,7 @@ const Login = () => {
 
           {/* Username */}
           <div className="mb-5">
-            <label className="text-gray-500 mb-2 block">
+            <label className="text-gray-600 font-semibold mb-2 block">
               Username
             </label>
             <input
@@ -132,7 +132,7 @@ const Login = () => {
 
           {/* Password */}
           <div className="mb-6">
-            <label className="text-gray-500 mb-2 block">
+            <label className="text-gray-600 font-semibold mb-2 block">
               Password
             </label>
             <div className="relative">
@@ -164,12 +164,12 @@ const Login = () => {
 
           {/* ✅ Role Dropdown */}
           <div className="mb-6">
-            <label className="text-gray-500 mb-2 block">Role</label>
+            <label className="text-gray-600 mb-2 block font-semibold">Role</label>
             <select
               name="role"
               value={formik.values.role}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              onBlur={formik.handleBlur}  
               className={inputClass("role")}
             >
               <option value="">— Select Role —</option>

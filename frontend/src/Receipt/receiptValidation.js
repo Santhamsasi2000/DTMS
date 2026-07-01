@@ -9,6 +9,12 @@ export const receiptValidationSchema = Yup.object({
   receiptMode: Yup.string()
     .required("Receipt mode is required"),
 
+  trackingNo: Yup.string().when("receiptMode", {
+  is: (mode) => mode === "post" || mode === "courier",
+  then: (schema) => schema.trim().required("Tracking No is required"),
+  otherwise: (schema) => schema.notRequired(),
+  }),
+
   formType: Yup.string()
     .required("Form type is required"),
 
@@ -32,30 +38,31 @@ export const receiptValidationSchema = Yup.object({
       }
     )
     .test(
-      "uan-or-memberId",
-      "Enter UAN or Member ID (at least one is required)",
-      function (value) {
-        const { memberId } = this.parent;
-        const uanFilled = value && value.trim() !== "";
-        const memberIdFilled = memberId && memberId.trim() !== "";
-        return uanFilled || memberIdFilled;
-      }
-    ),
+    "uan-or-id",
+    "Enter UAN or Member ID / Establishment ID (at least one is required)",
+    function (value) {
+      const { memberOrEstablishmentId } = this.parent;
+      const uanFilled = value && value.trim() !== "";
+      const idFilled = memberOrEstablishmentId && memberOrEstablishmentId.trim() !== "";
+      return uanFilled || idFilled;
+    }
+  ),
 
-  // ✅ Member ID — required if UAN is empty
-  memberId: Yup.string()
+  // ✅ Member ID / Establishment ID — required if UAN is empty
+  memberOrEstablishmentId: Yup.string()
     .nullable()
     .notRequired()
     .test(
-      "memberId-or-uan",
-      "Enter Member ID or UAN (at least one is required)",
+      "id-or-uan",
+      "Enter Member ID / Establishment ID or UAN (at least one is required)",
       function (value) {
         const { uan } = this.parent;
         const uanFilled = uan && uan.trim() !== "";
-        const memberIdFilled = value && value.trim() !== "";
-        return uanFilled || memberIdFilled;
+        const idFilled = value && value.trim() !== "";
+        return uanFilled || idFilled;
       }
     ),
+
 
   // ✅ Member Name — Optional, but if entered must be valid
   memberName: Yup.string()
@@ -82,9 +89,6 @@ export const receiptValidationSchema = Yup.object({
         return /^\d{10}$/.test(value);
       }
     ),
-
-  // ✅ Establishment Name — Optional
-  establishmentName: Yup.string().notRequired(),
 
   group: Yup.string()
     .trim()

@@ -18,18 +18,24 @@ const allowedOrigins = [
   "https://epfo-dtms.vercel.app",
 ];
 		
-		app.use(
-		  cors({
-		    origin: (origin, callback) => {
-		      if (!origin) return callback(null, true);
-		      if (allowedOrigins.includes(origin)) callback(null, true);
-		      else callback(new Error(`CORS: ${origin} not allowed`));
-		    },
-		    credentials:    true,
-		    methods:        ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-		    allowedHeaders: ["Content-Type", "Authorization"],
-		  })
-		);
+app.use(cors({
+  origin(origin, callback) {
+    // Allow Postman/server-to-server requests
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+  ],
+}));
 
 
 app.use(express.json()); 
