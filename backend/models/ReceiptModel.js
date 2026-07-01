@@ -53,17 +53,4 @@ const receiptSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ─── Auto-generate Taphal Number before save ──────────────────────────────────
-receiptSchema.pre("save", async function () {
-  if (!this.taphalNo) {
-    const now   = new Date();
-    const year  = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day   = String(now.getDate()).padStart(2, "0");
-    const count = await mongoose.model("Receipt").countDocuments();
-    const seq   = String(count + 1).padStart(4, "0");
-    this.taphalNo = `TPCH-${year}${month}${day}-${seq}`;
-  }
-});
-
 module.exports = mongoose.model("Receipt", receiptSchema);
