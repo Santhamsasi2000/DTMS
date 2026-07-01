@@ -103,7 +103,7 @@ const Receipt = () => {
         );
 
         setSuccessMsg(
-          `Receipt saved successfully! Tapal No : ${data.data.taphalNo}`
+          `Receipt saved successfully!`
         );
         resetForm();
         setFiles([]);
