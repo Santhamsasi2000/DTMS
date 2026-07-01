@@ -30,7 +30,7 @@ const TableSearch = ({ filters, setFilters, totalCount }) => {
             name="search"
             value={filters.search}
             onChange={handleChange}
-            placeholder="Search by Tapal No., UAN, Member Name, Group..."
+            placeholder="Search by UAN, Member or Establishment ID, Group..."
             className="w-full h-10 pl-10 pr-4 rounded-xl border border-gray-300 bg-gray-50
               text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2
               focus:ring-blue-500/30 focus:border-blue-500 hover:border-blue-300 transition-all"

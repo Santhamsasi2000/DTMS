@@ -3,7 +3,7 @@ import StatusBadge from "../../components/StatusBadge";
 import Pagination  from "../../components/Pagination";
 
 const TABLE_HEADERS = [
-  "#", "Tapal No.", "Date", "Form Type",
+  "#", "Date", "Form Type",
   "Member Name", "UAN", "Group", "Task",
   "Status", "Docs", "Action",
 ];
@@ -78,14 +78,6 @@ const AcknowledgementTable = ({
                 {/* # */}
                 <td className="px-4 py-3 text-gray-400 text-xs">
                   {(filters.page - 1) * filters.limit + idx + 1}
-                </td>
-
-                {/* Tapal No */}
-                <td className="px-4 py-3">
-                  <span className="font-mono text-xs font-semibold text-blue-700
-                    bg-blue-50 px-2 py-0.5 rounded-lg">
-                    {r.taphalNo}
-                  </span>
                 </td>
 
                 {/* Date */}

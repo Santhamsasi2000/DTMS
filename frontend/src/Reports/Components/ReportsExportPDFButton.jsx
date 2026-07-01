@@ -51,7 +51,6 @@ const ReportsExportPDFButton = ({ receipts }) => {
     // ─── Table ────────────────────────────────────────────────────────────────
     const columns = [
       { header: "#",            dataKey: "sno"      },
-      { header: "Tapal No.",    dataKey: "taphalNo" },
       { header: "Date",         dataKey: "date"     },
       { header: "Mode",         dataKey: "mode"     },
       { header: "Form Type",    dataKey: "formType" },
